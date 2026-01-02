@@ -8,7 +8,14 @@ const Store = ({ inventory, setInventory, setEquippedId }) => {
   const [newItems, setNewItems] = useState([]);
   const [feedback, setFeedback] = useState('');
 
-  // Mock Stripe Products
+  // Stripe Configuration
+  // TODO: Replace empty strings with your actual Stripe Payment Links
+  const STRIPE_LINKS = {
+    pack_1: '',      // e.g., https://buy.stripe.com/test_...
+    pack_10: '',
+    unlock_all: ''
+  };
+
   const products = [
     { id: 'pack_1', name: 'Arena Icon Pack - Single', price: '$0.50', count: 1 },
     { id: 'pack_10', name: 'Arena Icon Pack - 10-Pack', price: '$3.00', count: 10 },
@@ -16,17 +23,26 @@ const Store = ({ inventory, setInventory, setEquippedId }) => {
   ];
 
   const handleBuy = (product) => {
-    // In a real app, this would trigger Stripe
-    // For now, we mock success
+    // Check for Stripe Link
+    const link = STRIPE_LINKS[product.id];
+    if (link) {
+        window.location.href = link;
+        return;
+    }
+
+    // Fallback to Mock Mode if no link is provided
     if (product.type === 'unlock') {
-      alert('Redirecting to Stripe... (Mock: All items unlocked!)');
-      const allIds = ITEMS_LIST.map(i => i.id);
-      setInventory(prev => [...new Set([...prev, ...allIds])]);
+      const confirmUnlock = window.confirm('Stripe Link not configured. Unlock all items for free (Mock Mode)?');
+      if (confirmUnlock) {
+          const allIds = ITEMS_LIST.map(i => i.id);
+          setInventory(prev => [...new Set([...prev, ...allIds])]);
+          setFeedback('All items unlocked!');
+      }
       return;
     }
 
     setOpening(true);
-    setFeedback(`Opening ${product.count} packs...`);
+    setFeedback(`Opening ${product.count} packs... (Mock Mode)`);
 
     setTimeout(() => {
       const pulled = [];
@@ -100,7 +116,7 @@ const Store = ({ inventory, setInventory, setEquippedId }) => {
                  </div>
                ))}
                <div className="stripe-note">
-                 <p>Payments processed securely via Stripe (Mock Mode)</p>
+                 <p>To enable real payments, configure STRIPE_LINKS in src/Store.js</p>
                </div>
             </div>
           )}
