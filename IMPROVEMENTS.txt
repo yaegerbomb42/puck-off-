@@ -1,0 +1,6 @@
+5 Potential Improvements:
+1. Ranked Matchmaking: Implement an ELO system using the existing Socket.io backend to match players of similar skill.
+2. Daily Challenges: Add a daily rotation of objectives (e.g., 'Knock out 10 enemies with Rope Swing') for bonus currency.
+3. Clan System: Allow players to group up, share a clan tag, and contribute to a shared clan bank or leaderboard.
+4. Spectator Mode: Allow users to join rooms as 'ghosts' to watch live matches without participating.
+5. Replay System: Record the last 30 seconds of gameplay and allow users to save or share clips of epic knockouts.
